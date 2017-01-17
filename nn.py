@@ -44,18 +44,18 @@ class NN(object):
 		self.W1 = np.random.rand(self.number_of_inputs,self.number_of_hidden)
 		self.W2 = np.random.rand(self.number_of_hidden,self.number_of_outputs)
 
-	def sigmoid(x):
+	def sigmoid(self,x):
 		return 1/(1+(np.exp(x))) 
 
-	def sigmoid_prime(x):
-		return sigmoid(x) * (1.0 - sigmoid(x))
+	def sigmoid_prime(self,x):
+		return self.sigmoid(x) * (1.0 - self.sigmoid(x))
 
 	def feed_forward(self,X): # X being the input 
 
 		self.hidden_layer_sums = np.dot(X,self.W1)
 		self.hidden_layer_activation = self.sigmoid(self.hidden_layer_sums)
 		self.output_sum = np.dot(self.hidden_layer_activation,self.W2)
-		yP = sigmoid(self.output_sum)
+		yP = self.sigmoid(self.output_sum)
 
 		return yP
 
@@ -77,7 +77,7 @@ class NN(object):
 
 		# for e in xrange(epochs):
 
-		dJdW1,dJdW2 = self.cost_dericative_function(self,y,yP)
+		dJdW1,dJdW2 = self.cost_dericative_function(y,yP)
 		
 		#Updating the weights
 		self.W1 = self.W1 + learning_rate * dJdW1
