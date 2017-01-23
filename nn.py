@@ -33,6 +33,21 @@ def generate_dictionary(dataset):
 	labels = [dataset[i][-1] for i in xrange(len(dataset))]
 	mapping = {json.dumps(inputs[i]) : labels[i] for i in xrange(len(dataset))}
 	return mapping
+
+def cross_validation(dataset,n_split):
+	n_samples = len(dataset)
+	lss = n_samples // n_split + 1 # lss : large sample size
+	sss = n_samples // n_split # sss : small sample size
+	remainder = n_samples % n_split
+	larger_folds = [dataset[i*lss : (i+1)*lss] for i in xrange(remainder)]
+	index = remainder * lss
+	smaller_folds = [dataset[index:index+sss] for index in xrange(index,len(dataset),sss) ]
+	merged_folds = larger_folds + smaller_folds
+	for _ in xrange(n_split):
+		temp = merged_folds.pop(0)
+		test_set, train_set = temp, merged_folds
+		# Call main function here and validate
+		merged_folds.append(temp)
 	
 def normalize_dataset(dataset,minmax):
 	for row in dataset:
@@ -112,6 +127,3 @@ if __name__=="__main__":
 
 		main()
 		
-
-
-
