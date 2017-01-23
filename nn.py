@@ -1,5 +1,6 @@
 import pandas as pd 
 import numpy as np 
+import json
 
 
 filename = 'seeds.txt'
@@ -27,6 +28,12 @@ def generate_dataset(filename):
 
 	 return train_dataset, test_dataset
 
+def generate_dictionary(dataset):
+	inputs = [dataset[i][:3] for i in xrange(len(dataset))]
+	labels = [dataset[i][-1] for i in xrange(len(dataset))]
+	mapping = {json.dumps(inputs[i]) : labels[i] for i in xrange(len(dataset))}
+	return mapping
+	
 def normalize_dataset(dataset,minmax):
 	for row in dataset:
 		for i in xrange(len(row)-1):
